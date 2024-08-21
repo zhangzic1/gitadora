@@ -86,12 +86,28 @@
                 userInput.value = '';
 
                 try {
-                    const response = await fetch('YOUR_API_ENDPOINT', {
+                    const response = await fetch('https://api.coze.com/open_api/v2/chat', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
+                            'Authorization': 'Bearer pat_WF5XVXK2m36FyoWfUpzueSfkzsAMl8gttRL6KP1OO6RZmqoicKJSH2cSx1z84HfD'
                         },
-                        body: JSON.stringify({ message: message }),
+                        body: JSON.stringify(
+                            {
+                                "bot_id": "7402092697756516360",
+                                // "user_id": "123456789",
+                                user: "admin_123",
+                                "stream": false,
+                                "auto_save_history":true,
+                                query: message,
+                                // "additional_messages":[
+                                //     {
+                                //         "role":"user",
+                                //         "content":message,
+                                //         "content_type":"text"
+                                //     }
+                                // ]
+                            }),
                     });
 
                     if (!response.ok) {
@@ -99,10 +115,31 @@
                     }
 
                     const data = await response.json();
-                    addMessage(data.reply, false);
+
+                    // // 定义基础 URL 和查询参数
+                    // const baseUrl = 'https://api.coze.com/v3/chat/message/list';
+                    // const params = {
+                    //     "conversation_id": data.data.conversation_id,
+                    //     "chat_id": data.data.id,
+                    // };
+                    //
+                    // // 将查询参数附加到 URL
+                    // const url = new URL(baseUrl);
+                    // url.search = new URLSearchParams(params).toString();
+                    //
+                    // const msgResponse = await fetch(url.toString(), {
+                    //     method: 'POST',
+                    //     headers: {
+                    //         'Content-Type': 'application/json',
+                    //         'Authorization': 'Bearer pat_VCFHSjHfi4dws3PxMx0iNExsMpkddLBjcfCyqQzxfjcFUUBWOrLiJkeXKtRPFZ1b'
+                    //     },
+                    // });
+
+
+                    addMessage(data.messages.find(msg => msg.type === "answer").content, false);
                 } catch (error) {
                     console.error('Error:', error);
-                    addMessage('抱歉，出现了一个错误。请稍后再试。', false);
+                    addMessage('抱歉，出现了一个错误。请稍后再试。'+error, false);
                 }
             }
         }
@@ -115,15 +152,15 @@
         });
     </script>
 </body>
-<script src="https://sf-cdn.coze.com/obj/unpkg-va/flow-platform/chat-app-sdk/0.1.0-beta.5/libs/oversea/index.js"></script>
-<script>
-  new CozeWebSDK.WebChatClient({
-    config: {
-      bot_id: '7323032047566487559',
-    },
-    componentProps: {
-      title: 'Coze',
-    },
-  });
-</script>
+<!--<script src="https://sf-cdn.coze.com/obj/unpkg-va/flow-platform/chat-app-sdk/0.1.0-beta.5/libs/oversea/index.js"></script>-->
+<!--<script>-->
+<!--  new CozeWebSDK.WebChatClient({-->
+<!--    config: {-->
+<!--      bot_id: '7323032047566487559',-->
+<!--    },-->
+<!--    componentProps: {-->
+<!--      title: 'Coze',-->
+<!--    },-->
+<!--  });-->
+<!--</script>-->
 </html>
